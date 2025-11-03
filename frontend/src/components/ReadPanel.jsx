@@ -25,66 +25,66 @@ export default function ReadPanel({ client }) {
 
 	return (
 		<>
-			<div className="card" style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16, margin: '16px 0' }}>
-				<h2>Read: Get Item</h2>
+			<div className="card">
+				<h2 className="title">Read: Get Item</h2>
 				<form onSubmit={getItem}>
-					<label>Item ID</label>
-					<input type="number" value={getItemId} onChange={(e) => setGetItemId(e.target.value)} min={0} required />
-					<button type="submit">Get Item</button>
+					<label className="label" htmlFor="getItemId">Item ID</label>
+					<input id="getItemId" name="getItemId" className="input" type="number" value={getItemId} onChange={(e) => setGetItemId(e.target.value)} min={0} required />
+					<button className="btn" type="submit">Get Item</button>
 				</form>
 				<JSONBlock value={getItemOut} />
 			</div>
 
-			<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-				<div className="card" style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
-					<h2>Read: Item Count</h2>
-					<button onClick={getItemCount}>Get Item Count</button>
+			<div className="grid grid-2">
+				<div className="card">
+					<h2 className="title">Read: Item Count</h2>
+					<button className="btn" onClick={getItemCount}>Get Item Count</button>
 					<JSONBlock value={itemCountOut} />
 				</div>
-				<div className="card" style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
-					<h2>Read: Rental Count</h2>
-					<button onClick={getRentalCount}>Get Rental Count</button>
+				<div className="card">
+					<h2 className="title">Read: Rental Count</h2>
+					<button className="btn" onClick={getRentalCount}>Get Rental Count</button>
 					<JSONBlock value={rentalCountOut} />
 				</div>
 			</div>
 
-			<div className="card" style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16, margin: '16px 0' }}>
-				<h2>Read: Get Rental</h2>
+			<div className="card">
+				<h2 className="title">Read: Get Rental</h2>
 				<form onSubmit={getRental}>
-					<label>Rental ID</label>
-					<input type="number" value={rentalId} onChange={(e) => setRentalId(e.target.value)} min={0} required />
-					<button type="submit">Get Rental</button>
+					<label className="label" htmlFor="rentalId">Rental ID</label>
+					<input id="rentalId" name="rentalId" className="input" type="number" value={rentalId} onChange={(e) => setRentalId(e.target.value)} min={0} required />
+					<button className="btn" type="submit">Get Rental</button>
 				</form>
 				<JSONBlock value={getRentalOut} />
 			</div>
 
-			<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-				<div className="card" style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
-					<h2>Read: Item Rentals</h2>
+			<div className="grid grid-2">
+				<div className="card">
+					<h2 className="title">Read: Item Rentals</h2>
 					<form onSubmit={getItemRentals}>
-						<label>Item ID</label>
-						<input type="number" value={itemRentalsItemId} onChange={(e) => setItemRentalsItemId(e.target.value)} min={0} required />
-						<button type="submit">Get Item Rentals</button>
+						<label className="label" htmlFor="itemRentalsItemId">Item ID</label>
+						<input id="itemRentalsItemId" name="itemRentalsItemId" className="input" type="number" value={itemRentalsItemId} onChange={(e) => setItemRentalsItemId(e.target.value)} min={0} required />
+						<button className="btn" type="submit">Get Item Rentals</button>
 					</form>
 					<JSONBlock value={itemRentalsOut} />
 				</div>
-				<div className="card" style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
-					<h2>Read: User Rentals</h2>
+				<div className="card">
+					<h2 className="title">Read: User Rentals</h2>
 					<form onSubmit={getUserRentals}>
-						<label>User Address (StrKey)</label>
-						<input type="text" placeholder="G..." value={userAddress} onChange={(e) => setUserAddress(e.target.value)} required />
-						<button type="submit">Get User Rentals</button>
+						<label className="label" htmlFor="userAddress">User Address (StrKey)</label>
+						<input id="userAddress" name="userAddress" className="input" type="text" placeholder="G..." value={userAddress} onChange={(e) => setUserAddress(e.target.value)} required />
+						<button className="btn" type="submit">Get User Rentals</button>
 					</form>
 					<JSONBlock value={userRentalsOut} />
 				</div>
 			</div>
 
-			<div className="card" style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16, margin: '16px 0' }}>
-				<h2>Check: Is Overdue</h2>
+			<div className="card">
+				<h2 className="title">Check: Is Overdue</h2>
 				<form onSubmit={isOverdue}>
-					<label>Rental ID</label>
-					<input type="number" value={isOverdueRentalId} onChange={(e) => setIsOverdueRentalId(e.target.value)} min={0} required />
-					<button type="submit">Check</button>
+					<label className="label" htmlFor="isOverdueRentalId">Rental ID</label>
+					<input id="isOverdueRentalId" name="isOverdueRentalId" className="input" type="number" value={isOverdueRentalId} onChange={(e) => setIsOverdueRentalId(e.target.value)} min={0} required />
+					<button className="btn" type="submit">Check</button>
 				</form>
 				<JSONBlock value={isOverdueOut} />
 			</div>

@@ -29,14 +29,12 @@ export function useClient() {
 
   const ensureFreighterOk = useCallback(async () => {
     const available = await isFreighterAvailable();
-    console.debug("[wallet] isFreighterAvailable:", available);
     if (!available) {
       throw new Error(
         "Freighter not available. Ensure the extension is enabled for this site and not in private mode."
       );
     }
     const details = (await getNetworkDetails()) || {};
-    console.debug("[wallet] getNetworkDetails:", details);
     setDiagnostics((d) => ({
       ...d,
       freighter: {
@@ -62,31 +60,17 @@ export function useClient() {
     try {
       await ensureFreighterOk();
       const key = await connectFreighter();
-      console.debug("[wallet] connected pubKey:", key);
       const passphrase = networks.testnet.networkPassphrase;
       client.options.publicKey = key;
       client.options.signTransaction = async (xdrInput) => {
-        try {
-          console.debug(
-            "[wallet] signTransaction input xdr len:",
-            xdrInput?.length
-          );
-          const res = await signTransaction(xdrInput, {
-            networkPassphrase: passphrase,
-          });
-          console.debug(
-            "[wallet] signTransaction response keys:",
-            res && Object.keys(res || {})
-          );
-          if (res?.error)
-            throw new Error(res.error.message || String(res.error));
-          if (!res?.signedTxXdr)
-            throw new Error("Wallet did not return signedTxXdr");
-          return res; // return object as expected by sdk contract SignTransaction type
-        } catch (e) {
-          console.error("[wallet] signTransaction failed:", e);
-          throw e;
-        }
+        const res = await signTransaction(xdrInput, {
+          networkPassphrase: passphrase,
+        });
+        if (res?.error)
+          throw new Error(res.error.message || String(res.error));
+        if (!res?.signedTxXdr)
+          throw new Error("Wallet did not return signedTxXdr");
+        return res;
       };
       setPubKey(key);
       setStatus(`Wallet: ${key.slice(0, 6)}... connected`);
@@ -94,7 +78,6 @@ export function useClient() {
     } catch (e) {
       setStatus("Wallet connect failed");
       setError(String(e));
-      console.error("[wallet] connect failed:", e);
       throw e;
     } finally {
       setConnecting(false);

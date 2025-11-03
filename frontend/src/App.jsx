@@ -6,8 +6,7 @@ import ReadPanel from "./components/ReadPanel.jsx";
 import WritePanel from "./components/WritePanel.jsx";
 
 export default function App() {
-  const { client, pubKey, connect, status, error, connecting, diagnostics } =
-    useClient();
+  const { client, pubKey, connect, status, error, connecting, diagnostics } = useClient();
   const networkInfo = React.useMemo(
     () => ({
       networkPassphrase: networks.testnet.networkPassphrase,
@@ -27,29 +26,22 @@ export default function App() {
   };
 
   return (
-    <div
-      style={{
-        fontFamily:
-          'system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial',
-        margin: "2rem",
-        lineHeight: 1.4,
-      }}
-    >
-      <h1>Inventory Logger</h1>
-      <p className="muted">
-        Connected to Soroban Testnet. Use Freighter to sign write transactions.
-      </p>
+    <div className="container">
+      <div className="header">
+        <div className="brand">Inventory Logger</div>
+        <span className="badge">Testnet</span>
+      </div>
+      <p className="muted">Connected to Soroban Testnet. Use Freighter to sign write transactions.</p>
 
-      <WalletBar
-        status={status}
-        onConnect={onConnect}
-        networkInfo={networkInfo}
-        connecting={connecting}
-        error={error}
-        diagnostics={diagnostics}
-      />
-      <ReadPanel client={client} />
-      <WritePanel client={client} requireWallet={requireWallet} />
+      <WalletBar status={status} onConnect={onConnect} networkInfo={networkInfo} connecting={connecting} error={error} diagnostics={undefined} />
+      <div className="grid grid-2">
+        <div>
+          <ReadPanel client={client} />
+        </div>
+        <div>
+          <WritePanel client={client} requireWallet={requireWallet} />
+        </div>
+      </div>
     </div>
   );
 }
