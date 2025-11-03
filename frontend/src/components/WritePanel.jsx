@@ -14,9 +14,22 @@ export default function WritePanel({ client, requireWallet }) {
 	const [returner, setReturner] = React.useState('')
 	const [out, setOut] = React.useState('')
 
-	const addItem = async (e) => { e?.preventDefault(); try { requireWallet(); const tx = await client.add_item({ owner: owner.trim(), name: name.trim(), description: description.trim(), rental_price_per_day: rentalPrice.trim() }); const sent = await tx.signAndSend(); setOut({ method: 'add_item', result: sent.result }); } catch (e) { setOut({ method: 'add_item', error: String(e) }); } }
-	const issueItem = async (e) => { e?.preventDefault(); try { requireWallet(); const tx = await client.issue_item({ renter: issueRenter.trim(), item_id: BigInt(issueItemId), rental_days: BigInt(rentalDays), deposit_amount: depositAmount.trim() }); const sent = await tx.signAndSend(); setOut({ method: 'issue_item', result: sent.result }); } catch (e) { setOut({ method: 'issue_item', error: String(e) }); } }
-	const returnItem = async (e) => { e?.preventDefault(); try { requireWallet(); const tx = await client.return_item({ rental_id: BigInt(returnRentalId), returner: returner.trim() }); const sent = await tx.signAndSend(); setOut({ method: 'return_item', result: sent.result }); } catch (e) { setOut({ method: 'return_item', error: String(e) }); } }
+	const debugSend = async (label, assemble) => {
+		try {
+			const tx = await assemble()
+			console.debug(`[tx] ${label} built`, { isRead: tx.isReadCall })
+			const sent = await tx.signAndSend()
+			console.debug(`[tx] ${label} sent`, sent)
+			setOut({ method: label, result: sent.result })
+		} catch (e) {
+			console.error(`[tx] ${label} failed`, e)
+			setOut({ method: label, error: String(e), stack: e?.stack })
+		}
+	}
+
+	const addItem = async (e) => { e?.preventDefault(); try { requireWallet(); await debugSend('add_item', () => client.add_item({ owner: owner.trim(), name: name.trim(), description: description.trim(), rental_price_per_day: rentalPrice.trim() })) } catch {} }
+	const issueItem = async (e) => { e?.preventDefault(); try { requireWallet(); await debugSend('issue_item', () => client.issue_item({ renter: issueRenter.trim(), item_id: BigInt(issueItemId), rental_days: BigInt(rentalDays), deposit_amount: depositAmount.trim() })) } catch {} }
+	const returnItem = async (e) => { e?.preventDefault(); try { requireWallet(); await debugSend('return_item', () => client.return_item({ rental_id: BigInt(returnRentalId), returner: returner.trim() })) } catch {} }
 
 	return (
 		<div className="card" style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16, margin: '16px 0' }}>
