@@ -28,7 +28,48 @@ export default function WritePanel({ client, requireWallet }) {
 	}
 
 	const addItem = async (e) => { e?.preventDefault(); try { requireWallet(); await debugSend('add_item', () => client.add_item({ owner: owner.trim(), name: name.trim(), description: description.trim(), rental_price_per_day: rentalPrice.trim() })) } catch {} }
-	const issueItem = async (e) => { e?.preventDefault(); try { requireWallet(); await debugSend('issue_item', () => client.issue_item({ renter: issueRenter.trim(), item_id: BigInt(issueItemId), rental_days: BigInt(rentalDays), deposit_amount: depositAmount.trim() })) } catch {} }
+
+	const issueItem = async (e) => {
+		e?.preventDefault()
+		try {
+			requireWallet()
+			const renter = issueRenter.trim()
+			if (!/^G[A-Z2-7]{55}$/.test(renter)) {
+				setOut({ method: 'issue_item', error: 'Invalid renter address (StrKey expected)' })
+				return
+			}
+			const item_id = BigInt(issueItemId)
+			const days = BigInt(rentalDays)
+			if (item_id <= 0n || days <= 0n) {
+				setOut({ method: 'issue_item', error: 'Item ID and Rental days must be positive' })
+				return
+			}
+			// Fetch item to validate availability and price
+			const sim = await client.get_item({ item_id }, { simulate: true })
+			const item = sim.result
+			if (!item) {
+				setOut({ method: 'issue_item', error: `Item ${item_id.toString()} not found` })
+				return
+			}
+			if (item && item.is_available === false) {
+				setOut({ method: 'issue_item', error: 'Item is not available for rent' })
+				return
+			}
+			// rental_price_per_day is i128 -> BigInt
+			const price = BigInt(item.rental_price_per_day)
+			const minDeposit = price * days
+			const provided = BigInt(depositAmount.trim())
+			if (provided < minDeposit) {
+				setOut({ method: 'issue_item', error: `Deposit too low. Minimum required: ${minDeposit.toString()}` })
+				return
+			}
+			await debugSend('issue_item', () => client.issue_item({ renter, item_id, rental_days: days, deposit_amount: provided.toString() }))
+		} catch (err) {
+			console.error('[tx] issue_item precheck failed', err)
+			setOut({ method: 'issue_item', error: String(err) })
+		}
+	}
+
 	const returnItem = async (e) => { e?.preventDefault(); try { requireWallet(); await debugSend('return_item', () => client.return_item({ rental_id: BigInt(returnRentalId), returner: returner.trim() })) } catch {} }
 
 	return (
