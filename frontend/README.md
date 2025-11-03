@@ -1,43 +1,63 @@
-# Astro Starter Kit: Minimal
+# 🎨 Frontend (React + Vite)
 
-```sh
-npm create astro@latest -- --template minimal
+A modern single-page app to read from and write to the Inventory Logger Soroban contract. It supports Freighter wallet for transaction signing.
+
+## 🛠️ Stack
+
+- ⚛️ React 18, Vite 5
+- 🦊 Freighter wallet (`@stellar/freighter-api`)
+- 📦 Generated Soroban client (vendored at `src/packages/inventory_logger`)
+
+## 🚀 Setup
+
+```bash
+pnpm install
+pnpm dev
+# open http://localhost:5173
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 💡 Usage
 
-## 🚀 Project Structure
+1. 🌐 Open the app and click "Connect Freighter".
+2. 📖 Use the Read panels to fetch items, rentals, counts, and checks.
+3. ✍️ Use the Write panel to:
+   - ➕ Add an item
+   - 📝 Issue a rental (with client-side checks for renter, availability, and minimum deposit)
+   - 🔙 Return a rental
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🏗️ Build
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+pnpm build
+pnpm preview
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Build output is code-split into:
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- ⚛️ `react-*.js` (React runtime)
+- 🦊 `wallet-*.js` (Freighter API)
+- ⭐ `stellar-*.js` (Stellar SDK & Soroban libs)
+- 📚 `vendor-*.js` (remaining third-party)
+- 🎯 `index-*.js` (application code)
 
-Any static assets, like images, can be placed in the `public/` directory.
+## ⚙️ Configuration
 
-## 🧞 Commands
+- 🔗 Contract/network come from the generated client's `networks.testnet`.
+- 🚀 Vite optimizations are in `vite.config.js` (manualChunks and warning limits).
 
-All commands are run from the root of the project, from a terminal:
+## 🔧 Troubleshooting
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- ❌ **Freighter not found**: Ensure extension is installed and enabled; disable Brave Shields on localhost.
+- 🌐 **Network mismatch**: Switch Freighter to Testnet.
+- 🔢 **BigInt in JSON**: The UI displays large numbers as strings for readability.
+- 📦 **Large chunk warnings**: Expected because of the Stellar SDK. Already split into separate chunk; limit can be adjusted in `vite.config.js`.
 
-## 👀 Want to learn more?
+## 📜 Scripts
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- 🟢 `pnpm dev` — start dev server
+- 🔨 `pnpm build` — production build
+- 👀 `pnpm preview` — preview production build
+
+## 📄 License
+
+MIT
