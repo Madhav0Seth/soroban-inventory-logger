@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ["@stellar/freighter-api"],
+    include: ["@stellar/freighter-api", "@stellar/stellar-sdk", "buffer"],
   },
   build: {
     target: "es2020",

@@ -1,12 +1,13 @@
 import React from "react";
-import { networks } from "/src/packages/inventory_logger/dist/index.js";
+import { networks } from "/src/packages/inventory_logger/src/index.ts";
 import { useClient } from "./hooks/useClient.js";
 import WalletBar from "./components/WalletBar.jsx";
 import ReadPanel from "./components/ReadPanel.jsx";
 import WritePanel from "./components/WritePanel.jsx";
 
 export default function App() {
-  const { client, pubKey, connect, status, error, connecting, diagnostics } = useClient();
+  const { client, pubKey, connect, status, error, connecting, diagnostics } =
+    useClient();
   const networkInfo = React.useMemo(
     () => ({
       networkPassphrase: networks.testnet.networkPassphrase,
@@ -31,9 +32,18 @@ export default function App() {
         <div className="brand">Inventory Logger</div>
         <span className="badge">Testnet</span>
       </div>
-      <p className="muted">Connected to Soroban Testnet. Use Freighter to sign write transactions.</p>
+      <p className="muted">
+        Connected to Soroban Testnet. Use Freighter to sign write transactions.
+      </p>
 
-      <WalletBar status={status} onConnect={onConnect} networkInfo={networkInfo} connecting={connecting} error={error} diagnostics={undefined} />
+      <WalletBar
+        status={status}
+        onConnect={onConnect}
+        networkInfo={networkInfo}
+        connecting={connecting}
+        error={error}
+        diagnostics={undefined}
+      />
       <div className="grid grid-2">
         <div>
           <ReadPanel client={client} />

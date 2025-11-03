@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Client, networks } from "/src/packages/inventory_logger/dist/index.js";
+import { Client, networks } from "/src/packages/inventory_logger/src/index.ts";
 import {
   isFreighterAvailable,
   connectFreighter,
