@@ -6,8 +6,8 @@ import ReadPanel from "./components/ReadPanel.jsx";
 import WritePanel from "./components/WritePanel.jsx";
 
 export default function App() {
-  const { client, pubKey, connect } = useClient();
-  const [status, setStatus] = React.useState("Wallet: not connected");
+  const { client, pubKey, connect, status, error, connecting, diagnostics } =
+    useClient();
   const networkInfo = React.useMemo(
     () => ({
       networkPassphrase: networks.testnet.networkPassphrase,
@@ -18,11 +18,8 @@ export default function App() {
 
   const onConnect = async () => {
     try {
-      const key = await connect();
-      setStatus(`Wallet: ${key.slice(0, 6)}... connected`);
-    } catch (e) {
-      setStatus("Wallet connect failed");
-    }
+      await connect();
+    } catch (_) {}
   };
 
   const requireWallet = () => {
@@ -47,6 +44,9 @@ export default function App() {
         status={status}
         onConnect={onConnect}
         networkInfo={networkInfo}
+        connecting={connecting}
+        error={error}
+        diagnostics={diagnostics}
       />
       <ReadPanel client={client} />
       <WritePanel client={client} requireWallet={requireWallet} />
