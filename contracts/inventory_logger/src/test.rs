@@ -39,7 +39,7 @@ fn test_rent_and_return() {
 
     // Rent the item
     let rental_id = client.issue_item(&renter, &item_id, &7, &500);
-    
+
     let item = client.get_item(&item_id).unwrap();
     assert_eq!(item.is_available, false);
 
@@ -75,26 +75,26 @@ fn test_full_inventory_flow() {
         &owner,
         &String::from_str(&env, "Laptop"),
         &String::from_str(&env, "MacBook Pro 16"),
-        &150
+        &150,
     );
-    
+
     let camera_id = client.add_item(
         &owner,
         &String::from_str(&env, "Camera"),
         &String::from_str(&env, "Canon EOS R5"),
-        &100
+        &100,
     );
-    
+
     let drone_id = client.add_item(
         &owner,
         &String::from_str(&env, "Drone"),
         &String::from_str(&env, "DJI Mavic 3"),
-        &200
+        &200,
     );
 
     // Verify items added
     assert_eq!(client.get_item_count(), 3);
-    
+
     let laptop = client.get_item(&laptop_id).unwrap();
     assert_eq!(laptop.is_available, true);
     assert_eq!(laptop.rental_price_per_day, 150);
@@ -105,10 +105,10 @@ fn test_full_inventory_flow() {
 
     // Verify rentals
     assert_eq!(client.get_rental_count(), 2);
-    
+
     let laptop_after_rent = client.get_item(&laptop_id).unwrap();
     assert_eq!(laptop_after_rent.is_available, false);
-    
+
     let rental1 = client.get_rental(&rental1_id).unwrap();
     assert_eq!(rental1.is_active, true);
     assert_eq!(rental1.item_id, laptop_id);
@@ -119,10 +119,10 @@ fn test_full_inventory_flow() {
 
     // Return item
     client.return_item(&rental1_id, &renter1);
-    
+
     let laptop_after_return = client.get_item(&laptop_id).unwrap();
     assert_eq!(laptop_after_return.is_available, true);
-    
+
     let rental1_after = client.get_rental(&rental1_id).unwrap();
     assert_eq!(rental1_after.is_active, false);
     assert!(rental1_after.actual_return_date.is_some());
@@ -149,8 +149,18 @@ fn test_multiple_users() {
     let renter2 = Address::generate(&env);
 
     // Different owners add items
-    let item1 = client.add_item(&owner1, &String::from_str(&env, "PC"), &String::from_str(&env, "Gaming"), &300);
-    let item2 = client.add_item(&owner2, &String::from_str(&env, "DSLR"), &String::from_str(&env, "Sony"), &120);
+    let item1 = client.add_item(
+        &owner1,
+        &String::from_str(&env, "PC"),
+        &String::from_str(&env, "Gaming"),
+        &300,
+    );
+    let item2 = client.add_item(
+        &owner2,
+        &String::from_str(&env, "DSLR"),
+        &String::from_str(&env, "Sony"),
+        &120,
+    );
 
     // Different renters
     let rental1 = client.issue_item(&renter1, &item1, &10, &3000);
@@ -161,10 +171,10 @@ fn test_multiple_users() {
 
     // Return one
     client.return_item(&rental2, &renter2);
-    
+
     let item2_status = client.get_item(&item2).unwrap();
     assert_eq!(item2_status.is_available, true);
-    
+
     let item1_status = client.get_item(&item1).unwrap();
     assert_eq!(item1_status.is_available, false);
     // Suppress unused variable warning
@@ -185,11 +195,16 @@ fn test_rent_unavailable_item() {
     let renter1 = Address::generate(&env);
     let renter2 = Address::generate(&env);
 
-    let item_id = client.add_item(&owner, &String::from_str(&env, "Item"), &String::from_str(&env, "Test"), &50);
-    
+    let item_id = client.add_item(
+        &owner,
+        &String::from_str(&env, "Item"),
+        &String::from_str(&env, "Test"),
+        &50,
+    );
+
     // First rental succeeds
     client.issue_item(&renter1, &item_id, &5, &250);
-    
+
     // Second rental should panic
     client.issue_item(&renter2, &item_id, &3, &150);
 }
@@ -207,12 +222,17 @@ fn test_return_completed_rental() {
     let owner = Address::generate(&env);
     let renter = Address::generate(&env);
 
-    let item_id = client.add_item(&owner, &String::from_str(&env, "Item"), &String::from_str(&env, "Test"), &50);
+    let item_id = client.add_item(
+        &owner,
+        &String::from_str(&env, "Item"),
+        &String::from_str(&env, "Test"),
+        &50,
+    );
     let rental_id = client.issue_item(&renter, &item_id, &5, &250);
-    
+
     // First return succeeds
     client.return_item(&rental_id, &renter);
-    
+
     // Second return should panic
     client.return_item(&rental_id, &renter);
 }

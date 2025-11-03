@@ -46,8 +46,12 @@ impl InventoryContract {
     pub fn initialize(env: Env) {
         let item_counter: u64 = 0;
         let rental_counter: u64 = 0;
-        env.storage().instance().set(&DataKey::ItemCounter, &item_counter);
-        env.storage().instance().set(&DataKey::RentalCounter, &rental_counter);
+        env.storage()
+            .instance()
+            .set(&DataKey::ItemCounter, &item_counter);
+        env.storage()
+            .instance()
+            .set(&DataKey::RentalCounter, &rental_counter);
     }
 
     /// Add a new inventory item
@@ -142,7 +146,9 @@ impl InventoryContract {
 
         // Mark item as unavailable
         item.is_available = false;
-        env.storage().persistent().set(&DataKey::Item(item_id), &item);
+        env.storage()
+            .persistent()
+            .set(&DataKey::Item(item_id), &item);
 
         // Store rental record
         env.storage()
@@ -275,7 +281,9 @@ impl InventoryContract {
         }
 
         item.is_available = is_available;
-        env.storage().persistent().set(&DataKey::Item(item_id), &item);
+        env.storage()
+            .persistent()
+            .set(&DataKey::Item(item_id), &item);
     }
 
     /// Get total number of items
