@@ -1,10 +1,389 @@
 ---
-import { Client, networks } from "inventory_logger";
 
-const client = new Client({
-  ...networks.testnet,
-  rpcUrl: "https://soroban-testnet.stellar.org",
-});
-
-// client
 ---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inventory Logger</title>
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Ubuntu,
+          Cantarell,
+          Noto Sans,
+          "Helvetica Neue",
+          Arial,
+          "Apple Color Emoji",
+          "Segoe UI Emoji";
+        margin: 2rem;
+        line-height: 1.4;
+      }
+      h1 {
+        margin-bottom: 0.5rem;
+      }
+      h2 {
+        margin-top: 2rem;
+      }
+      form,
+      .card {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+      label {
+        display: block;
+        font-weight: 600;
+        margin: 0.5rem 0 0.25rem;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+      }
+      button {
+        margin-top: 0.75rem;
+        padding: 0.5rem 0.75rem;
+        background: #111827;
+        color: #fff;
+        border: 0;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .muted {
+        color: #6b7280;
+        font-size: 0.9rem;
+      }
+      pre {
+        background: #0b1220;
+        color: #e5e7eb;
+        padding: 0.75rem;
+        border-radius: 8px;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Inventory Logger</h1>
+    <p class="muted">
+      Connected to Soroban Testnet (read methods and simulations only).
+    </p>
+
+    <div class="card">
+      <h2>Network</h2>
+      <div id="networkInfo" class="muted">Loading...</div>
+    </div>
+
+    <div class="card">
+      <h2>Read: Get Item</h2>
+      <form id="getItemForm">
+        <label for="getItemId">Item ID</label>
+        <input id="getItemId" type="number" min="0" required />
+        <button type="submit">Get Item</button>
+      </form>
+      <pre id="getItemOut"></pre>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h2>Read: Item Count</h2>
+        <button id="getItemCountBtn">Get Item Count</button>
+        <pre id="getItemCountOut"></pre>
+      </div>
+      <div class="card">
+        <h2>Read: Rental Count</h2>
+        <button id="getRentalCountBtn">Get Rental Count</button>
+        <pre id="getRentalCountOut"></pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Read: Get Rental</h2>
+      <form id="getRentalForm">
+        <label for="getRentalId">Rental ID</label>
+        <input id="getRentalId" type="number" min="0" required />
+        <button type="submit">Get Rental</button>
+      </form>
+      <pre id="getRentalOut"></pre>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h2>Read: Item Rentals</h2>
+        <form id="getItemRentalsForm">
+          <label for="getItemRentalsItemId">Item ID</label>
+          <input id="getItemRentalsItemId" type="number" min="0" required />
+          <button type="submit">Get Item Rentals</button>
+        </form>
+        <pre id="getItemRentalsOut"></pre>
+      </div>
+      <div class="card">
+        <h2>Read: User Rentals</h2>
+        <form id="getUserRentalsForm">
+          <label for="getUserAddress">User Address (StrKey)</label>
+          <input id="getUserAddress" type="text" placeholder="G..." required />
+          <button type="submit">Get User Rentals</button>
+        </form>
+        <pre id="getUserRentalsOut"></pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Check: Is Overdue</h2>
+      <form id="isOverdueForm">
+        <label for="isOverdueRentalId">Rental ID</label>
+        <input id="isOverdueRentalId" type="number" min="0" required />
+        <button type="submit">Check</button>
+      </form>
+      <pre id="isOverdueOut"></pre>
+    </div>
+
+    <div class="card">
+      <h2>Write (Simulation only)</h2>
+      <p class="muted">
+        State-changing calls require signing. Below actions run simulate=true
+        and will not submit a transaction.
+      </p>
+
+      <div class="row">
+        <form id="addItemForm">
+          <h3>Add Item</h3>
+          <label for="owner">Owner (StrKey)</label>
+          <input id="owner" type="text" placeholder="G..." required />
+          <label for="name">Name</label>
+          <input id="name" type="text" required />
+          <label for="description">Description</label>
+          <textarea id="description" rows="3" required></textarea>
+          <label for="rentalPrice">Rental price per day (i128 as string)</label>
+          <input
+            id="rentalPrice"
+            type="text"
+            placeholder="e.g. 10000000"
+            required
+          />
+          <button type="submit">Simulate add_item</button>
+        </form>
+
+        <form id="issueItemForm">
+          <h3>Issue Item</h3>
+          <label for="renter">Renter (StrKey)</label>
+          <input id="renter" type="text" placeholder="G..." required />
+          <label for="issueItemId">Item ID</label>
+          <input id="issueItemId" type="number" min="0" required />
+          <label for="rentalDays">Rental days</label>
+          <input id="rentalDays" type="number" min="1" required />
+          <label for="depositAmount">Deposit amount (i128 as string)</label>
+          <input
+            id="depositAmount"
+            type="text"
+            placeholder="e.g. 50000000"
+            required
+          />
+          <button type="submit">Simulate issue_item</button>
+        </form>
+      </div>
+
+      <form id="returnItemForm">
+        <h3>Return Item</h3>
+        <label for="returnRentalId">Rental ID</label>
+        <input id="returnRentalId" type="number" min="0" required />
+        <label for="returner">Returner (StrKey)</label>
+        <input id="returner" type="text" placeholder="G..." required />
+        <button type="submit">Simulate return_item</button>
+      </form>
+
+      <pre id="writesOut"></pre>
+    </div>
+
+    <script type="module">
+      import {
+        Client,
+        networks,
+      } from "/src/packages/inventory_logger/dist/index.js";
+
+      const client = new Client({
+        ...networks.testnet,
+        rpcUrl: "https://soroban-testnet.stellar.org",
+      });
+
+      const $ = (id) => document.getElementById(id);
+      const jsonBigInt = (value) =>
+        typeof value === "bigint" ? value.toString() : value;
+      const show = (el, data) => {
+        el.textContent = JSON.stringify(data, (k, v) => jsonBigInt(v), 2);
+      };
+
+      // Network info
+      show($("networkInfo"), {
+        networkPassphrase: networks.testnet.networkPassphrase,
+        contractId: networks.testnet.contractId,
+      });
+
+      // Read: Get Item
+      $("getItemForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const itemId = BigInt($("getItemId").value);
+        try {
+          const tx = await client.get_item(
+            { item_id: itemId },
+            { simulate: true }
+          );
+          show($("getItemOut"), tx.result);
+        } catch (err) {
+          show($("getItemOut"), { error: String(err) });
+        }
+      });
+
+      // Read: Item Count
+      $("getItemCountBtn").addEventListener("click", async () => {
+        try {
+          const tx = await client.get_item_count({ simulate: true });
+          show($("getItemCountOut"), tx.result);
+        } catch (err) {
+          show($("getItemCountOut"), { error: String(err) });
+        }
+      });
+
+      // Read: Rental Count
+      $("getRentalCountBtn").addEventListener("click", async () => {
+        try {
+          const tx = await client.get_rental_count({ simulate: true });
+          show($("getRentalCountOut"), tx.result);
+        } catch (err) {
+          show($("getRentalCountOut"), { error: String(err) });
+        }
+      });
+
+      // Read: Get Rental
+      $("getRentalForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const rentalId = BigInt($("getRentalId").value);
+        try {
+          const tx = await client.get_rental(
+            { rental_id: rentalId },
+            { simulate: true }
+          );
+          show($("getRentalOut"), tx.result);
+        } catch (err) {
+          show($("getRentalOut"), { error: String(err) });
+        }
+      });
+
+      // Read: Item Rentals
+      $("getItemRentalsForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const itemId = BigInt($("getItemRentalsItemId").value);
+        try {
+          const tx = await client.get_item_rentals(
+            { item_id: itemId },
+            { simulate: true }
+          );
+          show($("getItemRentalsOut"), tx.result);
+        } catch (err) {
+          show($("getItemRentalsOut"), { error: String(err) });
+        }
+      });
+
+      // Read: User Rentals
+      $("getUserRentalsForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const user = $("getUserAddress").value.trim();
+        try {
+          const tx = await client.get_user_rentals(
+            { user },
+            { simulate: true }
+          );
+          show($("getUserRentalsOut"), tx.result);
+        } catch (err) {
+          show($("getUserRentalsOut"), { error: String(err) });
+        }
+      });
+
+      // Check: Is Overdue
+      $("isOverdueForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const rentalId = BigInt($("isOverdueRentalId").value);
+        try {
+          const tx = await client.is_overdue(
+            { rental_id: rentalId },
+            { simulate: true }
+          );
+          show($("isOverdueOut"), tx.result);
+        } catch (err) {
+          show($("isOverdueOut"), { error: String(err) });
+        }
+      });
+
+      // Writes (Simulation only)
+      $("addItemForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const owner = $("owner").value.trim();
+        const name = $("name").value.trim();
+        const description = $("description").value.trim();
+        const rental_price_per_day = $("rentalPrice").value.trim();
+        try {
+          const tx = await client.add_item(
+            { owner, name, description, rental_price_per_day },
+            { simulate: true }
+          );
+          show($("writesOut"), { method: "add_item", simulation: tx.result });
+        } catch (err) {
+          show($("writesOut"), { method: "add_item", error: String(err) });
+        }
+      });
+
+      $("issueItemForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const renter = $("renter").value.trim();
+        const item_id = BigInt($("issueItemId").value);
+        const rental_days = BigInt($("rentalDays").value);
+        const deposit_amount = $("depositAmount").value.trim();
+        try {
+          const tx = await client.issue_item(
+            { renter, item_id, rental_days, deposit_amount },
+            { simulate: true }
+          );
+          show($("writesOut"), { method: "issue_item", simulation: tx.result });
+        } catch (err) {
+          show($("writesOut"), { method: "issue_item", error: String(err) });
+        }
+      });
+
+      $("returnItemForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const rental_id = BigInt($("returnRentalId").value);
+        const returner = $("returner").value.trim();
+        try {
+          const tx = await client.return_item(
+            { rental_id, returner },
+            { simulate: true }
+          );
+          show($("writesOut"), {
+            method: "return_item",
+            simulation: tx.result,
+          });
+        } catch (err) {
+          show($("writesOut"), { method: "return_item", error: String(err) });
+        }
+      });
+    </script>
+  </body>
+</html>
