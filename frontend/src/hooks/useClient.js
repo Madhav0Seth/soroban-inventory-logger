@@ -24,14 +24,14 @@ export function useClient() {
         ...networks.testnet,
         rpcUrl: "https://soroban-testnet.stellar.org",
       }),
-    []
+    [],
   );
 
   const ensureFreighterOk = useCallback(async () => {
     const available = await isFreighterAvailable();
     if (!available) {
       throw new Error(
-        "Freighter not available. Ensure the extension is enabled for this site and not in private mode."
+        "Freighter not available. Ensure the extension is enabled for this site and not in private mode.",
       );
     }
     const details = (await getNetworkDetails()) || {};
@@ -49,7 +49,7 @@ export function useClient() {
       throw new Error(
         `Freighter is on a different network: ${
           details.network || details.networkPassphrase
-        }. Switch to Testnet.`
+        }. Switch to Testnet.`,
       );
     }
   }, []);
@@ -66,8 +66,7 @@ export function useClient() {
         const res = await signTransaction(xdrInput, {
           networkPassphrase: passphrase,
         });
-        if (res?.error)
-          throw new Error(res.error.message || String(res.error));
+        if (res?.error) throw new Error(res.error.message || String(res.error));
         if (!res?.signedTxXdr)
           throw new Error("Wallet did not return signedTxXdr");
         return res;

@@ -1,12 +1,22 @@
-📦 Invilog — Decentralized Inventory Rental and Logging System
+# 📦 Invilog — Decentralized Inventory Rental and Logging System
 
-📝 Project Description
+## 📝 Project Description
+
 A decentralized peer-to-peer rental platform built on the Stellar blockchain using Soroban smart contracts. Users can list items for rent, manage inventory, and track rental history transparently without intermediaries. All transactions are recorded immutably on-chain, ensuring trust and accountability.
 
-🌟 Project Vision
+## 🌟 Project Vision
+
 Create a trustless, transparent marketplace for peer-to-peer asset rental, eliminating intermediaries while promoting sustainable sharing-economy practices through blockchain technology.
 
-✨ Key Features
+🔗 **Live Demo:** [soroban-inventory-logger.vercel.app](https://soroban-inventory-logger.vercel.app/)
+
+## 🔐 Contract ID
+
+CAKVDQJ4OEC6KXVDUWIACJV37V6MY3PNASD7V6ASCRVNIET2D5HF5UES
+
+<img width="1917" height="919" alt="{208F5FED-D41C-4992-BA17-75676C0772DC}" src="https://github.com/user-attachments/assets/743bf692-682f-45e8-98c5-0b052912fcbb" />
+
+## ✨ Key Features
 
 - 🧩 Item Management — Add, update, and track inventory with pricing
 - 🤝 Rental System — Automated booking with deposit collection and availability control
@@ -15,7 +25,7 @@ Create a trustless, transparent marketplace for peer-to-peer asset rental, elimi
 - 🔐 Access Control — Owner authentication and self-rental prevention
 - ⏰ Overdue Detection — Automatic late rental identification
 
-🔭 Future Scope
+## 🔭 Future Scope
 
 - 💸 Payment Integration — Automated XLM/token payments and deposit returns
 - ⭐ Rating System — User reviews and reputation scores
@@ -25,11 +35,6 @@ Create a trustless, transparent marketplace for peer-to-peer asset rental, elimi
 - 🧾 NFT Integration — Tokenize high-value rental items
 - 📊 Analytics Dashboard — Rental income and utilization insights
 - 🧭 Enterprise Features — Fleet management and API access
-
-🔐 CONTRACT ID
-CAKVDQJ4OEC6KXVDUWIACJV37V6MY3PNASD7V6ASCRVNIET2D5HF5UES
-
-<img width="1917" height="919" alt="{208F5FED-D41C-4992-BA17-75676C0772DC}" src="https://github.com/user-attachments/assets/743bf692-682f-45e8-98c5-0b052912fcbb" />
 
 ---
 

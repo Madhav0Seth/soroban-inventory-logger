@@ -1,5 +1,7 @@
 # 🎨 Frontend (React + Vite)
 
+🔗 **Live Demo:** [soroban-inventory-logger.vercel.app](https://soroban-inventory-logger.vercel.app/)
+
 A modern single-page app to read from and write to the Inventory Logger Soroban contract. It supports Freighter wallet for transaction signing.
 
 ## 🛠️ Stack

@@ -91,7 +91,7 @@ export interface Client {
        * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
        */
       simulate?: boolean;
-    }
+    },
   ) => Promise<AssembledTransaction<u64>>;
 
   /**
@@ -115,7 +115,7 @@ export interface Client {
        * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
        */
       simulate?: boolean;
-    }
+    },
   ) => Promise<AssembledTransaction<Option<InventoryItem>>>;
 
   /**
@@ -139,7 +139,7 @@ export interface Client {
        * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
        */
       simulate?: boolean;
-    }
+    },
   ) => Promise<AssembledTransaction<Option<RentalRecord>>>;
 
   /**
@@ -184,7 +184,7 @@ export interface Client {
        * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
        */
       simulate?: boolean;
-    }
+    },
   ) => Promise<AssembledTransaction<boolean>>;
 
   /**
@@ -213,7 +213,7 @@ export interface Client {
        * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
        */
       simulate?: boolean;
-    }
+    },
   ) => Promise<AssembledTransaction<u64>>;
 
   /**
@@ -237,7 +237,7 @@ export interface Client {
        * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
        */
       simulate?: boolean;
-    }
+    },
   ) => Promise<AssembledTransaction<boolean>>;
 
   /**
@@ -282,7 +282,7 @@ export interface Client {
        * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
        */
       simulate?: boolean;
-    }
+    },
   ) => Promise<AssembledTransaction<Array<u64>>>;
 
   /**
@@ -327,7 +327,7 @@ export interface Client {
        * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
        */
       simulate?: boolean;
-    }
+    },
   ) => Promise<AssembledTransaction<Array<u64>>>;
 
   /**
@@ -355,7 +355,7 @@ export interface Client {
        * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
        */
       simulate?: boolean;
-    }
+    },
   ) => Promise<AssembledTransaction<null>>;
 }
 export class Client extends ContractClient {
@@ -369,7 +369,7 @@ export class Client extends ContractClient {
         salt?: Buffer | Uint8Array;
         /** The format used to decode `wasmHash`, if it's provided as a string. */
         format?: "hex" | "base64";
-      }
+      },
   ): Promise<AssembledTransaction<T>> {
     return ContractClient.deploy(null, options);
   }
@@ -392,7 +392,7 @@ export class Client extends ContractClient {
         "AAAAAAAAABpHZXQgYWxsIHJlbnRhbHMgZm9yIGEgdXNlcgAAAAAAEGdldF91c2VyX3JlbnRhbHMAAAABAAAAAAAAAAR1c2VyAAAAEwAAAAEAAAPqAAAABg==",
         "AAAAAAAAAC5VcGRhdGUgaXRlbSBhdmFpbGFiaWxpdHkgbWFudWFsbHkgKG93bmVyIG9ubHkpAAAAAAAYdXBkYXRlX2l0ZW1fYXZhaWxhYmlsaXR5AAAAAwAAAAAAAAAHaXRlbV9pZAAAAAAGAAAAAAAAAAxpc19hdmFpbGFibGUAAAABAAAAAAAAAAZjYWxsZXIAAAAAABMAAAAA",
       ]),
-      options
+      options,
     );
   }
   public readonly fromJSON = {

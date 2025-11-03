@@ -13,7 +13,7 @@ export default function App() {
       networkPassphrase: networks.testnet.networkPassphrase,
       contractId: networks.testnet.contractId,
     }),
-    []
+    [],
   );
 
   const onConnect = async () => {

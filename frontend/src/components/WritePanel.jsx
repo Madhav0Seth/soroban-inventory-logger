@@ -34,7 +34,7 @@ export default function WritePanel({ client, requireWallet }) {
           name: name.trim(),
           description: description.trim(),
           rental_price_per_day: rentalPrice.trim(),
-        })
+        }),
       );
     } catch {}
   };
@@ -92,7 +92,7 @@ export default function WritePanel({ client, requireWallet }) {
           item_id,
           rental_days: days,
           deposit_amount: provided.toString(),
-        })
+        }),
       );
     } catch (err) {
       setOut({ method: "issue_item", error: String(err) });
@@ -107,7 +107,7 @@ export default function WritePanel({ client, requireWallet }) {
         client.return_item({
           rental_id: BigInt(returnRentalId),
           returner: returner.trim(),
-        })
+        }),
       );
     } catch {}
   };
